@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "41529140161",
+    "project_id": "chatapplocket",
+    "storage_bucket": "chatapplocket.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41529140161:android:d38e3b74f5ebfae9f8c540",
+        "android_client_info": {
+          "package_name": "com.example.chatapplocket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtPhP0n81d1f-D_s4D_M0rOiOJJz0Loh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
