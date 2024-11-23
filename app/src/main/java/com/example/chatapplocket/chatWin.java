@@ -36,17 +36,22 @@ import java.util.Date;
 public class chatWin extends AppCompatActivity {
 
     String reciverimg, recivername, reciveruid , Senderuid ;
+
     ImageView profileimgg;
-    TextView reciverName;
-    CardView sebdtb;
-    EditText textmsg;
+    TextView reciverNName;
+
     FirebaseAuth firebaseAuth;
     FirebaseDatabase database;
+
     public static String senderImg , reciverIImg;
+
+    CardView sebdtb;
+    EditText textmsg;
+
     String senderRoom , reciverRoom;
-    RecyclerView mmessengersApdapter;
+    RecyclerView messagesAdapter;
     ArrayList<msgModelclass> msgArrayList;
-    messagesAdapter messagesAdapter;
+    messagesAdapter mmessagesAdapter;
 
 
     @Override
@@ -55,40 +60,47 @@ public class chatWin extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat_win);
 
-        mmessengersApdapter = findViewById(R.id.msgadpter);
+        database = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        recivername = getIntent().getStringExtra("name");
+        reciverimg = getIntent().getStringExtra("pic");
+        reciveruid = getIntent().getStringExtra("uid");
+
+        msgArrayList = new ArrayList<>();
+
+        sebdtb = findViewById(R.id.sendbtnn);
+        textmsg = findViewById(R.id.textmsg);
+
+        reciverNName = findViewById(R.id.recivername);
+        profileimgg = findViewById(R.id.profileimgg);
+        messagesAdapter = findViewById(R.id.msgadpter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
-        mmessengersApdapter.setLayoutManager(linearLayoutManager);
-        messagesAdapter = new messagesAdapter(chatWin.this,msgArrayList);
-        mmessengersApdapter.setAdapter(messagesAdapter);
+        messagesAdapter.setLayoutManager(linearLayoutManager);
+        mmessagesAdapter = new messagesAdapter(chatWin.this,msgArrayList);
+        messagesAdapter.setAdapter(mmessagesAdapter);
 
-       recivername = getIntent().getStringExtra("name");
-       reciverimg = getIntent().getStringExtra("pic");
-       reciveruid = getIntent().getStringExtra("uid");
+        //pi
+        reciverNName.setText("" + recivername);
+//        profileimgg.setImageURI(Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatapplocket.appspot.com/o/"));
 
-       msgArrayList = new ArrayList<>();
+        Senderuid = firebaseAuth.getUid();
+        senderRoom = Senderuid + reciveruid;
+        reciverRoom = reciveruid + Senderuid;
 
-       sebdtb = findViewById(R.id.sendbtnn);
-       textmsg = findViewById(R.id.textmsg);
+       DatabaseReference reference = database.getReference().child("user").child(firebaseAuth.getUid());
+       DatabaseReference chatreference = database.getReference().child("chats").child(senderRoom).child("messages");
 
-       profileimgg = findViewById(R.id.profileimgg);
-       reciverName = findViewById(R.id.recivername);
-
-       profileimgg.setImageURI(Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatapplocket.appspot.com/o/"));
-       reciverName.setText(""+recivername);
-
-       DatabaseReference reference = database.getReference().child("chats").child(firebaseAuth.getUid()+reciveruid);
-       DatabaseReference chatrefence = database.getReference().child("user").child(senderRoom).child("messages");
-
-       chatrefence.addValueEventListener(new ValueEventListener() {
+       chatreference.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
                msgArrayList.clear();
                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                   msgModelclass msgModelclass = dataSnapshot.getValue(msgModelclass.class);
-                   msgArrayList.add(msgModelclass);
+                   msgModelclass messages = dataSnapshot.getValue(msgModelclass.class);
+                   msgArrayList.add(messages);
                }
-               messagesAdapter.notifyDataSetChanged();
+               mmessagesAdapter.notifyDataSetChanged();
            }
 
            @Override
@@ -101,7 +113,7 @@ public class chatWin extends AppCompatActivity {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 senderImg = snapshot.child("profilepic").getValue().toString();
-                reciverIImg = reciverIImg;
+                reciverIImg = reciverimg;
            }
 
            @Override
@@ -109,9 +121,7 @@ public class chatWin extends AppCompatActivity {
 
            }
        });
-       Senderuid = FirebaseAuth.getInstance().getUid();
-       senderRoom = Senderuid + reciveruid;
-       reciverRoom = reciveruid + Senderuid;
+
 
        sebdtb.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -119,15 +129,25 @@ public class chatWin extends AppCompatActivity {
                String msg = textmsg.getText().toString();
                 if(msg.isEmpty()){
                     Toast.makeText(chatWin.this, "Vui lòng nhập tin nhắn", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
                 textmsg.setText("");
                 Date date = new Date();
-                msgModelclass msgModel = new msgModelclass(msg,Senderuid,date.getTime());
+                msgModelclass messagess = new msgModelclass(msg,Senderuid,date.getTime());
+
                 database = FirebaseDatabase.getInstance();
-                database.getReference().child("chats").child("senderRoom").child(msg).push().setValue(msgModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                database.getReference().child("chats")
+                        .child("senderRoom")
+                        .child(msg)
+                        .push()
+                        .setValue(messagess).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        database.getReference().child("chats").child("reciverRoom").child("messages").push().setValue(msgModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        database.getReference().child("chats")
+                                .child("reciverRoom")
+                                .child("messages")
+                                .push().setValue(messagess).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 Toast.makeText(chatWin.this, "Gửi tin nhắn thành công", Toast.LENGTH_SHORT).show();

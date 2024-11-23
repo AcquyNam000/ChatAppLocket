@@ -39,9 +39,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.Viewholder> {
             @Override
             public void onClick(View view) {
             Intent intent = new Intent(mainActivity,chatWin.class);
-            intent.putExtra("name",u.userName);
-            intent.putExtra("pic",u.profilepic);
-            intent.putExtra("uid",u.userId);
+            intent.putExtra("name",u.getUserName());
+            intent.putExtra("pic",u.getProfilepic());
+            intent.putExtra("uid",u.getUserId());
             mainActivity.startActivity(intent);
         }});
     }
@@ -52,13 +52,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.Viewholder> {
     }
 
     public class Viewholder extends RecyclerView.ViewHolder {
-//        ImageView userImg;
+        ImageView userImg;
         TextView username;
         TextView userstatus;
 
         public Viewholder(@NonNull View itemview ){
             super(itemview);
-//            userImg = itemview.findViewById(R.id.userImg);
+            userImg = itemview.findViewById(R.id.userImg);
             username = itemview.findViewById(R.id.username);
             userstatus = itemview.findViewById(R.id.userstatus);
 
