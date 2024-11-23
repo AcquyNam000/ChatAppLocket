@@ -71,7 +71,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/camBut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -85,7 +85,7 @@
                 app:srcCompat="@drawable/chat" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/settingBut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

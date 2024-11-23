@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     ArrayList<User> userArrayList;
     ImageButton imglogout;
+    ImageView cumbut,setbut;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+        cumbut = findViewById(R.id.camBut);
+        setbut = findViewById(R.id.settingBut);
+
+        setbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, setting.class);
+                startActivity(intent);
+            }
+        });
+
+        cumbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent,10);
             }
         });
 
