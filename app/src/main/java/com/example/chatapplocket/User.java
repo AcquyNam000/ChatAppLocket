@@ -1,7 +1,7 @@
 package com.example.chatapplocket;
 
 public class User {
-    String profilepic = "https://firebasestorage.googleapis.com/v0/b/chatapplocket.appspot.com/o/",mail,userName,password,userId,lastMessage,status;
+    String profilepic ="https://firebasestorage.googleapis.com/v0/b/chatapplocket.appspot.com/o/" ,mail,userName,password,userId,lastMessage,status;
 
 
     public User(String  password, String email, String userName, String userId, String status) {

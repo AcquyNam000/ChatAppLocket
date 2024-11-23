@@ -22,10 +22,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import android.text.TextUtils;
 
 public class login extends AppCompatActivity {
-    Button button;
+    Button button , btnDangki;
     EditText email , password;
     FirebaseAuth auth;
     String emailPattern  = "[a-zA-z0-9._-]+@[a-z]+\\.[a-z]+";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,7 @@ public class login extends AppCompatActivity {
     button = findViewById(R.id.logButton);
     email = findViewById(R.id.editTextLogEmail);
     password = findViewById(R.id.editTextLogPassword);
+    btnDangki = findViewById(R.id.dangkiBTN);
 
     button.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -73,5 +75,15 @@ public class login extends AppCompatActivity {
             });}
         }
     });
+    btnDangki.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(login.this,resgitration.class);
+            startActivity(intent);
+            finish();
+        }
+    });
     }
+
+
 }

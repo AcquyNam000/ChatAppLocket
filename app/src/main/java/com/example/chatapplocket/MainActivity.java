@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
 
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     ArrayList<User> userArrayList;
     ImageButton imglogout;
+    ImageView cumbut,setbut;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +104,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        cumbut = findViewById(R.id.camBut);
+        setbut = findViewById(R.id.settingBut);
+
+        setbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, setting.class);
+                startActivity(intent);
+            }
+        });
+
+//        cumbut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent,10);
+//            }
+//        });
 
         imglogout = findViewById(R.id.logoutImg);
         imglogout.setOnClickListener(new View.OnClickListener() {
@@ -130,9 +153,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-         if(auth.getCurrentUser() == null){
+        if(auth.getCurrentUser() == null){
             Intent intent =  new Intent(MainActivity.this,login.class);
             startActivity(intent);
+            finish();
         }
     }
 }

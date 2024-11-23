@@ -1,3 +1,5 @@
+
+
 package com.example.chatapplocket;
 
 import android.content.Intent;
@@ -38,12 +40,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.Viewholder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent = new Intent(mainActivity,chatWin.class);
-            intent.putExtra("name",u.getUserName());
-            intent.putExtra("pic",u.getProfilepic());
-            intent.putExtra("uid",u.getUserId());
-            mainActivity.startActivity(intent);
-        }});
+                Intent intent = new Intent(mainActivity,chatWin.class);
+                intent.putExtra("name",u.getUserName());
+                intent.putExtra("pic",u.getProfilepic());
+                intent.putExtra("uid",u.getUserId());
+                mainActivity.startActivity(intent);
+            }});
     }
 
     @Override

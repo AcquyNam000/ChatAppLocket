@@ -2,9 +2,12 @@ package com.example.chatapplocket;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +36,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 public class resgitration extends AppCompatActivity {
     TextView loginbut;
     EditText rg_username , rg_email , rg_password , rg_repassword;
@@ -43,6 +51,9 @@ public class resgitration extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseStorage storage;
     ProgressDialog progressDialog;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    public  Database dbSqlite = new Database(this,"Quanly.sqlite",null,1);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +64,7 @@ public class resgitration extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+//        dbSqlite.queryData("CREATE TABLE IF NOT EXISTS tbl_img(id INTEGER PRIMARY KEY AUTOINCREMENT, HinhAnh BLOB , email VARCHAR(255) )");
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Establishing The Account");
         progressDialog.setCancelable(false);
@@ -63,6 +75,7 @@ public class resgitration extends AppCompatActivity {
         rg_repassword = findViewById(R.id.rgrepassword);
         rg_profileImg = findViewById(R.id.profilerg0);
         rg_singup = findViewById(R.id.signupbutton);
+
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -75,6 +88,33 @@ public class resgitration extends AppCompatActivity {
                finish();
            }
        });
+
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            try {
+                                InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                rg_profileImg.setImageBitmap(bitmap);
+                                byte[] imageBytes = imageToByteArray(bitmap);
+                                // Lưu vào SQLite
+                                boolean isInserted = false;
+                                isInserted = dbSqlite.INSERT_HINHANH(imageBytes,rg_email.toString());
+                                if (isInserted) {
+                                             Toast.makeText(this, "Lưu ảnh thành công!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(this, "Lưu ảnh thất bại!", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } catch (Exception e) {
+//                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
 
        rg_singup.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -105,14 +145,13 @@ public class resgitration extends AppCompatActivity {
                            if(task.isSuccessful()) {
                                String id = task.getResult().getUser().getUid();
                                DatabaseReference reference = database.getReference().child("user").child(id);
-                               ////// đoạn code tự biên
                            User u = new User(cPassword,email,name,id,status);
                            reference.setValue(u).addOnCompleteListener(new OnCompleteListener<Void>() {
                                @Override
                                public void onComplete(@NonNull Task<Void> task) {
                                    if(task.isSuccessful()){
                                        progressDialog.dismiss();
-                                       Intent intent = new Intent(resgitration.this,MainActivity.class);
+                                       Intent intent = new Intent(resgitration.this,login.class);
                                        startActivity(intent);
                                        finish();
                                    } else {
@@ -120,73 +159,20 @@ public class resgitration extends AppCompatActivity {
                                    }
                                }
                            });
-                           }}});}}});}}
-                               /////đoạn code tự biên
-//                               StorageReference storageReference = storage.getReference().child("Upload").child(id);
+                           }}});}}});
 
-//                               if(imgURL != null){
-//                                   storageReference.putFile(imgURL).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                                       @Override
-//                                       public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                                           if(task.isSuccessful()){
-//                                               storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                                   @Override
-//                                                   public void onSuccess(Uri uri) {
-//                                                       imageuri = uri.toString();
-//                                                       user u = new user(id,name,email,Password,cPassword, imageuri, status);
-//                                                   }
-//                                               });
-//                                           } else {
-//                                               String status = "tôi đang sử dụng chương trình";
-//                                               imageuri = "https://www.facebook.com/photo/?fbid=1586496045466558&set=pb.100023185329715.-2207520000";
-//                                               user u = new user(id,name,email,Password,cPassword,imageuri,status);
-//                                               reference.setValue(u).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                   @Override
-//                                                   public void onComplete(@NonNull Task<Void> task) {
-//                                                       if(task.isSuccessful()){
-//                                                           Intent intent = new Intent(resgitration.this,MainActivity.class);
-//                                                           startActivity(intent);
-//                                                           finish();
-//                                                       } else {
-//                                                           Toast.makeText(resgitration.this,"Tạo tài khoản thất bại",Toast.LENGTH_SHORT).show();
-//                                                       }
-//                                                   }
-//                                               });
-//                                           }
-//                                       }
-//                                   });
-//                               }
-//
-//                           }else {
-//                               Toast.makeText(resgitration.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-//                           }
-//                       }
-//                   });
-//               }
-//           }
-//       });
-//
-//
-//       rg_profileImg.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View view) {
-//               Intent intent  = new Intent();
-//               intent.setType("Image/*");
-//               intent.setAction(Intent.ACTION_GET_CONTENT);
-//               startActivityForResult(Intent.createChooser(intent,"Chọn một bức ảnh"),10);
-//           }
-//       });
-//    }
-//
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 10) {
-//            if (data != null) {
-//                imgURL = data.getData();
-//                rg_profileImg.setImageURI(imgURL);
-//            }
-//        }
-//    }
-//}
+        rg_profileImg.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            imagePickerLauncher.launch(Intent.createChooser(intent, "Select Picture"));
+        });
+
+    }
+
+    private byte[] imageToByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+}
