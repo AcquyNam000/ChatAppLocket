@@ -18,13 +18,13 @@ import java.util.ArrayList;
 
 public class messagesAdapter extends RecyclerView.Adapter {
     Context context;
-    ArrayList<msgModelclass> msgArrayList;
+    ArrayList<msgModelclass>messagesAdpterArrayList;
     int ITEM_SEND = 1;
     int ITEM_RECIVE = 2;
 
-    public messagesAdapter(Context context, ArrayList<msgModelclass> msgArrayList) {
+    public messagesAdapter(Context context, ArrayList<msgModelclass>messagesAdpterArrayList) {
         this.context = context;
-        this.msgArrayList = msgArrayList;
+        this.messagesAdpterArrayList =messagesAdpterArrayList;
     }
 
 
@@ -42,28 +42,26 @@ public class messagesAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        msgModelclass msgModelclass = msgArrayList.get(position);
+        msgModelclass msgModelclass =messagesAdpterArrayList.get(position);
         if(holder.getClass() == senderviewholder.class){
             senderviewholder viewHolder = (senderviewholder) holder;
             viewHolder.msgtxt.setText(msgModelclass.getMessage());
-//            Picasso.get().load(senderImg).into(viewHolder.cricleImage);
 
         }else {
             reciverviewholder viewHolder = (reciverviewholder) holder;
             viewHolder.msgtxt.setText(msgModelclass.getMessage());
-//            Picasso.get().load(reciverIImg).into(viewHolder.cricleImage);
         }
     }
 
     @Override
     public int getItemCount() {
-        return msgArrayList.size();
+        return messagesAdpterArrayList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        msgModelclass msgModelclass = msgArrayList.get(position);
-        if(FirebaseAuth.getInstance().getUid().equals(msgModelclass.getSenderId())){
+        msgModelclass  messages =messagesAdpterArrayList.get(position);
+        if(FirebaseAuth.getInstance().getUid().equals( messages.getSenderId())){
             return ITEM_SEND;
         }else {
             return ITEM_RECIVE;
