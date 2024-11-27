@@ -95,7 +95,7 @@ public class chatWin extends AppCompatActivity {
        chatreference.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//               msgArrayList.clear();
+               msgArrayList.clear();
                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                    msgModelclass messages = dataSnapshot.getValue(msgModelclass.class);
                    msgArrayList.add(messages);
@@ -138,14 +138,14 @@ public class chatWin extends AppCompatActivity {
 
                 database = FirebaseDatabase.getInstance();
                 database.getReference().child("chats")
-                        .child(senderRoom)
-                        .child("messages")
+                        .child("senderRoom")
+                        .child(msg)
                         .push()
                         .setValue(messagess).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         database.getReference().child("chats")
-                                .child(reciverRoom)
+                                .child("reciverRoom")
                                 .child("messages")
                                 .push().setValue(messagess).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
