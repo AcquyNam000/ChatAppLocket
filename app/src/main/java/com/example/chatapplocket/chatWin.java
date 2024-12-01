@@ -83,7 +83,6 @@ public class chatWin extends AppCompatActivity {
 
         //pi
         reciverNName.setText("" + recivername);
-//        profileimgg.setImageURI(Uri.parse("https://firebasestorage.googleapis.com/v0/b/chatapplocket.appspot.com/o/"));
 
         Senderuid = firebaseAuth.getUid();
         senderRoom = Senderuid + reciveruid;
@@ -138,14 +137,14 @@ public class chatWin extends AppCompatActivity {
 
                 database = FirebaseDatabase.getInstance();
                 database.getReference().child("chats")
-                        .child("senderRoom")
-                        .child(msg)
+                        .child(senderRoom)
+                        .child("messages")
                         .push()
                         .setValue(messagess).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         database.getReference().child("chats")
-                                .child("reciverRoom")
+                                .child(reciverRoom)
                                 .child("messages")
                                 .push().setValue(messagess).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override

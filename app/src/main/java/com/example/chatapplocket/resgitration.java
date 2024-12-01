@@ -102,7 +102,7 @@ public class resgitration extends AppCompatActivity {
                                 byte[] imageBytes = imageToByteArray(bitmap);
                                 // Lưu vào SQLite
                                 boolean isInserted = false;
-                                isInserted = dbSqlite.INSERT_HINHANH(imageBytes,rg_email.toString());
+                                isInserted = dbSqlite.INSERT_HINHANH(imageBytes,rg_email.getText().toString());
                                 if (isInserted) {
                                              Toast.makeText(this, "Lưu ảnh thành công!", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -110,7 +110,7 @@ public class resgitration extends AppCompatActivity {
                                 }
 
                             } catch (Exception e) {
-//                                e.printStackTrace();
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -127,16 +127,16 @@ public class resgitration extends AppCompatActivity {
 
                if(TextUtils.isEmpty(name) || TextUtils.isEmpty(email)
                        || TextUtils.isEmpty(Password) || TextUtils.isEmpty(cPassword)){
-                   progressDialog.dismiss();
+//                   progressDialog.dismiss();
                    Toast.makeText(resgitration.this,"Làm ơn hãy điền hết dữ liệu ",Toast.LENGTH_SHORT).show();
                }else if( !email.matches(emailPattern)){
-                   progressDialog.dismiss();
+//                   progressDialog.dismiss();
                    rg_email.setError("Hãy điền đúng kiểu của email ");
                } else if (Password.length() < 6 ) {
-                   progressDialog.dismiss();
+//                   progressDialog.dismiss();
                    rg_password.setError("Mật khẩu phải có ít nhất 6 kí tự ");
                } else if ( !Password.equals(cPassword) ) {
-                   progressDialog.dismiss();
+//                   progressDialog.dismiss();
                    rg_password.setError("Hai mã mật khẩu không giống nhau");
                } else {
                    auth.createUserWithEmailAndPassword(email,Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

@@ -3,6 +3,8 @@
 package com.example.chatapplocket;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.Viewholder> {
         User u =  userArrayList.get(position);
         holder.username.setText(u.userName);
         holder.userstatus.setText(u.status);
+        Database dbHelper = new Database(mainActivity);
+        byte[] imageBytes = dbHelper.getSingleImage(u.getMail());
+        if (imageBytes != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            holder.userImg.setImageBitmap(bitmap); // Gán ảnh vào ImageView
+        } else {
+            // Gán ảnh mặc định nếu không tìm thấy ảnh
+        }
 //        Picasso.get().load(u.profilepic).into(holder.userImg);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
