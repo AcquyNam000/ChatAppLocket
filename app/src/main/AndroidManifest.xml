@@ -18,6 +18,12 @@
         android:theme="@style/Theme.ChatAppLocket"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".splash"
+            android:exported="false" />
+        <activity
             android:name=".FriendAdapter"
             android:exported="false" />
         <activity
@@ -36,7 +42,7 @@
             android:name=".login"
             android:exported="false" />
         <activity
-            android:name=".splash"
+            android:name=".THI.AddSanPhamActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".THI.SanPhamListActivity"
             android:exported="false" />
     </application>
 

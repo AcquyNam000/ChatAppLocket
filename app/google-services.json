@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "41529140161",
+    "firebase_url": "https://chatapplocket-default-rtdb.firebaseio.com",
     "project_id": "chatapplocket",
     "storage_bucket": "chatapplocket.firebasestorage.app"
   },
